@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/EdoRguez/business-manager-admin/results"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -20,7 +21,7 @@ var (
 )
 
 func main() {
-	initialModel := Model{0, false, 10, 0, 0, false, false}
+	initialModel := Model{results.NewResults(), 0, 10, 0, 0, false, false}
 	p := tea.NewProgram(initialModel)
 	if _, err := p.Run(); err != nil {
 		fmt.Println("could not start program:", err)

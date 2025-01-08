@@ -1,4 +1,4 @@
-package views
+package main
 
 import (
 	"fmt"
@@ -25,25 +25,25 @@ var (
 	ramp = utils.MakeRampStyles("#B14FFF", "#00FFA3", progressBarWidth)
 )
 
-type EndProgramModel struct {
+type ViewEndProgram struct {
 	optionSelected int
 	isLoaded       bool
 	progress       float64
 	ticks          int
 }
 
-func NewEndProgramModal(optionSelected int, isLoaded bool, progress float64, ticks int) EndProgramModel {
-	return EndProgramModel{
+func NewViewEndProgram(optionSelected int, isLoaded bool, progress float64, ticks int) ViewEndProgram {
+	return ViewEndProgram{
 		optionSelected: optionSelected,
 		isLoaded:       isLoaded,
 		progress:       progress,
 	}
 }
 
-func (m EndProgramModel) EndProgramView() string {
+func (v ViewEndProgram) EndProgramView() string {
 	var msg string
 
-	switch m.optionSelected {
+	switch v.optionSelected {
 	case 0:
 		msg = fmt.Sprintf("Carrot planting?\n\nCool, we'll need %s and %s...", keywordStyle.Render("libgarden"), keywordStyle.Render("vegeutils"))
 	case 1:
@@ -55,11 +55,11 @@ func (m EndProgramModel) EndProgramView() string {
 	}
 
 	label := "Downloading..."
-	if m.isLoaded {
-		label = fmt.Sprintf("Downloaded. Exiting in %s seconds...", ticksStyle.Render(strconv.Itoa(m.ticks)))
+	if v.isLoaded {
+		label = fmt.Sprintf("Downloaded. Exiting in %s seconds...", ticksStyle.Render(strconv.Itoa(v.ticks)))
 	}
 
-	return msg + "\n\n" + label + "\n" + progressbar(m.progress) + "%"
+	return msg + "\n\n" + label + "\n" + progressbar(v.progress) + "%"
 }
 
 func progressbar(percent float64) string {
