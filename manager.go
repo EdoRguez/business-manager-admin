@@ -1,4 +1,17 @@
-package results
+package main
+
+type Manager struct {
+	results     Results
+	CurrentView int
+}
+
+func NewManager() Manager {
+	r := NewResults()
+	return Manager{
+		results:     r,
+		CurrentView: 0,
+	}
+}
 
 type Items map[string]any
 
@@ -16,9 +29,11 @@ func (r Results) GetItems() Items {
 
 func (r *Results) SetItem(key string, value any) {
 	_, ok := r.items[key]
-	if !ok {
-		r.items[key] = value
+	if ok {
+		panic("Item key already exists!")
 	}
+
+	r.items[key] = value
 }
 
 func (r Results) GetItemValue(key string) any {

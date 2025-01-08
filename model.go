@@ -1,20 +1,18 @@
 package main
 
 import (
-	"github.com/EdoRguez/business-manager-admin/results"
-	"github.com/EdoRguez/business-manager-admin/views"
+	"github.com/EdoRguez/business-manager-admin/constants"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/fogleman/ease"
 )
 
 type Model struct {
-	Results     results.Results
-	CurrentView int
-	Ticks       int
-	Frames      int
-	Progress    float64
-	IsLoaded    bool
-	Quitting    bool
+	Manager  Manager
+	Ticks    int
+	Frames   int
+	Progress float64
+	IsLoaded bool
+	Quitting bool
 }
 
 func (m Model) Init() tea.Cmd {
@@ -37,16 +35,16 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	// appropriate view based on the current state.
 	// return m.ViewManager.Update()
 
-	if m.CurrentView == views.SelectView {
-
+	if m.Manager.CurrentView == constants.View_Select {
+		return UpdateViewSelect(msg, m)
 	} else {
-
+		return nil, nil
 	}
 
-	if !m.Chosen {
-		return updateChoices(msg, m)
-	}
-	return updateChosen(msg, m)
+	// if !m.Chosen {
+	// 	return updateChoices(msg, m)
+	// }
+	// return updateChosen(msg, m)
 }
 
 // The main view, which just calls the appropriate sub-view
@@ -56,13 +54,11 @@ func (m Model) View() string {
 		return "\n  See you later!\n\n"
 	}
 
-	switch m.CurrentView {
-	case views.SelectView:
-		v := NewViewSelect(m.Results)
-		s = v.SelectView()
-	case views.EndProgramView:
-		v := NewViewEndProgram(views.EndProgramView, m.IsLoaded, m.Progress, m.Ticks)
-		s = v.EndProgramView()
+	switch m.Manager.CurrentView {
+	case constants.View_Select:
+		s = ViewSelect(m)
+		// case constants.View_EndProgram:
+		// 	s = ViewEndProgram()
 	}
 
 	return mainStyle.Render("\n" + s + "\n\n")
