@@ -15,7 +15,7 @@ func main() {
 	}
 
 	db.DBCompanyConnection(c)
-	db.DBAuthConnection(c)
+	db.DBUserConnection(c)
 
 	cmd.Execute()
 }

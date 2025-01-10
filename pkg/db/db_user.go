@@ -10,22 +10,22 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-var DBCompany *gorm.DB
+var DBUser *gorm.DB
 
-func DBCompanyConnection(c config.Config) {
+func DBUserConnection(c config.Config) {
 	var error error
-	DBCompany, error = gorm.Open(postgres.Open(c.Db_Company), &gorm.Config{
+	DBUser, error = gorm.Open(postgres.Open(c.Db_Auth), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix:   "company.",
+			TablePrefix:   "user.",
 			SingularTable: true,
 		}})
-	if error != nil || DBCompany == nil {
+	if error != nil || DBUser == nil {
 		log.Fatal(error)
 	}
 }
 
-func CreateCompany(model *models.Company) error {
-	res := DBCompany.Create(model)
+func CreateUser(model *models.User) error {
+	res := DBUser.Create(model)
 	err := res.Error
 
 	return err

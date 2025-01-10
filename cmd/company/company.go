@@ -1,11 +1,17 @@
 package company
 
 import (
-	"bufio"
 	"fmt"
-	"os"
+	"time"
 
+	"github.com/EdoRguez/business-manager-admin/pkg/db"
+	"github.com/EdoRguez/business-manager-admin/pkg/models"
 	"github.com/spf13/cobra"
+)
+
+const (
+	createAction = "create"
+	editAction   = "edit"
 )
 
 var (
@@ -15,19 +21,10 @@ var (
 		Short: "Company Features",
 		Long:  `This subcommand starts company features`,
 		Run: func(cmd *cobra.Command, args []string) {
-			reader := bufio.NewReader(os.Stdin)
-
-			fmt.Println()
-			fmt.Print(" > Company name: ")
-			name, _ := reader.ReadString('\n')
-
-			fmt.Print(" > Plan ID (Basic = 1 / Pro = 2): ")
-			planId, _ := reader.ReadString('\n')
-
-			fmt.Print(" > Last Payment Date (YYYY-MM-DD): ")
-			paymentDate, _ := reader.ReadString('\n')
-
-			fmt.Printf("Hello %s, you are %s years old, %s.\n", name, planId, paymentDate)
+			switch action {
+			case createAction:
+				CreateCompany()
+			}
 		},
 	}
 )
@@ -46,4 +43,32 @@ func init() {
 	// helloCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	CompanyCmd.Flags().StringVarP(&action, "action", "a", "", "Action  (create/edit)")
 	CompanyCmd.MarkFlagRequired("action")
+}
+
+func CreateCompany() {
+	var model models.Company
+	model.CreatedAt = time.Now()
+	model.ModifiedAt = time.Now()
+
+	fmt.Println()
+	fmt.Print(" > Company name: ")
+	_, _ = fmt.Scanf("%s", &model.Name)
+
+	fmt.Print(" > Name Format URL: ")
+	_, _ = fmt.Scanf("%s", &model.NameFormatUrl)
+
+	fmt.Print(" > Plan ID (Basic = 1 / Pro = 2): ")
+	_, _ = fmt.Scanf("%d", &model.PlanID)
+
+	fmt.Print(" > Last Payment Date (YYYY-MM-DD): ")
+	var lastPaymentDateInput string
+	_, _ = fmt.Scanln(&lastPaymentDateInput)
+	model.LastPaymentDate, _ = time.Parse("2006-01-02", lastPaymentDateInput)
+
+	if err := db.CreateCompany(&model); err != nil {
+		fmt.Println("Error Creating Company")
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("\n- Company Created !")
+	}
 }
