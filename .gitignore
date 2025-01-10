@@ -1,0 +1,17 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# vscode
+.vscode
+
+# testing
+coverage
+
+# production
+build
+
+# Environment files
+*.env
+
+# local env files
+.env*.local
+!example.env
