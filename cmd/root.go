@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/EdoRguez/business-manager-admin/cmd/company"
+	"github.com/EdoRguez/business-manager-admin/cmd/user"
 	"github.com/spf13/cobra"
 )
 
@@ -28,4 +29,5 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(company.CompanyCmd)
+	rootCmd.AddCommand(user.UserCmd)
 }

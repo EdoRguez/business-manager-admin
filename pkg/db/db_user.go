@@ -16,7 +16,7 @@ func DBUserConnection(c config.Config) {
 	var error error
 	DBUser, error = gorm.Open(postgres.Open(c.Db_Auth), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix:   "user.",
+			TablePrefix:   "auth.",
 			SingularTable: true,
 		}})
 	if error != nil || DBUser == nil {

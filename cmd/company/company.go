@@ -69,6 +69,6 @@ func CreateCompany() {
 		fmt.Println("Error Creating Company")
 		fmt.Println(err.Error())
 	} else {
-		fmt.Println("\n- Company Created !")
+		fmt.Printf("\n- Company Created ! ID = %d", model.ID)
 	}
 }
