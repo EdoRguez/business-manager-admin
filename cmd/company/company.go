@@ -68,22 +68,21 @@ func CreateCompany() {
 	fmt.Print(" > Last Payment Date (YYYY-MM-DD): ")
 	var lastPaymentDateInput string
 	_, _ = fmt.Scanln(&lastPaymentDateInput)
-	model.LastPaymentDate, _ = time.Parse("2006-01-02", lastPaymentDateInput)
+	location, _ := time.LoadLocation("Local")
+	model.LastPaymentDate, _ = time.ParseInLocation("2006-01-02", lastPaymentDateInput, location)
 
 	if err := db.CreateCompany(&model); err != nil {
-		fmt.Println("Error Creating Company")
+		fmt.Println("- Error Creating Company")
 		fmt.Println(err.Error())
 	} else {
-		fmt.Printf("\n- Company Created ! ID = %d", model.ID)
+		fmt.Printf("\n- Company Created ! ID = %v \n\n", model.ID)
 	}
 }
 
 func doesCompanyExist(name string) bool {
 	company := db.GetCompanyByName(name)
-	fmt.Println("hjola")
-	fmt.Println(company)
 	if company != nil {
-		fmt.Println("- Error, Company already exists!")
+		fmt.Printf("\n - Error, Company already exists!\n\n")
 		return true
 	}
 	return false
@@ -92,7 +91,7 @@ func doesCompanyExist(name string) bool {
 func doesUrlExist(url string) bool {
 	company := db.GetCompanyByNameURL(url)
 	if company != nil {
-		fmt.Println("- Error, URL already exists!")
+		fmt.Printf("\n - Error, URL already exists!\n\n")
 		return true
 	}
 	return false

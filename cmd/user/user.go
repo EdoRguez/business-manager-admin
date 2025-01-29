@@ -52,14 +52,18 @@ func CreateUser() {
 	model.ModifiedAt = time.Now()
 
 	fmt.Println()
-	fmt.Print(" > Company ID: ")
-	_, _ = fmt.Scanln(&model.CompanyID)
+	for ok := true; ok; ok = doesNotCompanyExist(model.CompanyID) {
+		fmt.Print(" > Company ID: ")
+		_, _ = fmt.Scanln(&model.CompanyID)
+	}
 
 	fmt.Print(" > Role ID (SuperAdmin (NO) = 1 / Admin = 2 / Regular = 3): ")
 	_, _ = fmt.Scanln(&model.RoleID)
 
-	fmt.Print(" > Email: ")
-	_, _ = fmt.Scanln(&model.Email)
+	for ok := true; ok; ok = doesUserExist(model.Email) {
+		fmt.Print(" > Email: ")
+		_, _ = fmt.Scanln(&model.Email)
+	}
 
 	fmt.Print(" > Password: ")
 	_, _ = fmt.Scanln(&model.PasswordHash)
@@ -69,6 +73,24 @@ func CreateUser() {
 		fmt.Println("Error Creating User")
 		fmt.Println(err.Error())
 	} else {
-		fmt.Printf("\n- User Created ! ID = %d", model.ID)
+		fmt.Printf("\n - User Created ! ID = %d \n\n", model.ID)
 	}
+}
+
+func doesNotCompanyExist(id int64) bool {
+	company := db.GetCompanyById(id)
+	if company == nil {
+		fmt.Printf("\n - Error, Company doesn't exist!\n\n")
+		return true
+	}
+	return false
+}
+
+func doesUserExist(email string) bool {
+	user := db.GetUserByEmail(email)
+	if user != nil {
+		fmt.Printf("\n - Error, User already exists!\n\n")
+		return true
+	}
+	return false
 }
