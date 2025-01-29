@@ -51,11 +51,16 @@ func CreateCompany() {
 	model.ModifiedAt = time.Now()
 
 	fmt.Println()
-	fmt.Print(" > Company name: ")
-	_, _ = fmt.Scanf("%s", &model.Name)
 
-	fmt.Print(" > Name Format URL: ")
-	_, _ = fmt.Scanf("%s", &model.NameFormatUrl)
+	for ok := true; ok; ok = doesCompanyExist(model.Name) {
+		fmt.Print(" > Company name: ")
+		_, _ = fmt.Scanf("%s", &model.Name)
+	}
+
+	for ok := true; ok; ok = doesUrlExist(model.NameFormatUrl) {
+		fmt.Print(" > Name Format URL: ")
+		_, _ = fmt.Scanf("%s", &model.NameFormatUrl)
+	}
 
 	fmt.Print(" > Plan ID (Basic = 1 / Pro = 2): ")
 	_, _ = fmt.Scanf("%d", &model.PlanID)
@@ -71,4 +76,24 @@ func CreateCompany() {
 	} else {
 		fmt.Printf("\n- Company Created ! ID = %d", model.ID)
 	}
+}
+
+func doesCompanyExist(name string) bool {
+	company := db.GetCompanyByName(name)
+	fmt.Println("hjola")
+	fmt.Println(company)
+	if company != nil {
+		fmt.Println("- Error, Company already exists!")
+		return true
+	}
+	return false
+}
+
+func doesUrlExist(url string) bool {
+	company := db.GetCompanyByNameURL(url)
+	if company != nil {
+		fmt.Println("- Error, URL already exists!")
+		return true
+	}
+	return false
 }

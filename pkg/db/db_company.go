@@ -2,6 +2,7 @@ package db
 
 import (
 	"log"
+	"strings"
 
 	"github.com/EdoRguez/business-manager-admin/pkg/config"
 	"github.com/EdoRguez/business-manager-admin/pkg/models"
@@ -29,4 +30,18 @@ func CreateCompany(model *models.Company) error {
 	err := res.Error
 
 	return err
+}
+
+func GetCompanyByName(name string) *models.Company {
+	var model *models.Company
+	trimmedName := strings.TrimSpace(name)
+	DBCompany.First(&model, "LOWER(name) = LOWER(?)", trimmedName)
+	return model
+}
+
+func GetCompanyByNameURL(url string) *models.Company {
+	var model *models.Company
+	trimmedUrl := strings.TrimSpace(url)
+	DBCompany.First(&model, "LOWER(url) = LOWER(?)", trimmedUrl)
+	return model
 }
